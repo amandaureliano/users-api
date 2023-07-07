@@ -1,0 +1,45 @@
+{
+  "name": "users-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon",
+    "test": "jest",
+    "migration:create": "knex migrate:make",
+    "migration:revert": "knex migrate:rollback",
+    "migration:run": "knex migrate:latest",
+    "postgres:start": "docker run -d -p $(grep POSTGRES_PORT .env | cut -d= -f 2):5432 --name $(grep POSTGRES_DATABASE .env | cut -d= -f 2) -e POSTGRES_HOST_AUTH_METHOD=trust postgres:12-alpine",
+    "postgres:exec": "docker exec $(grep POSTGRES_DATABASE .env | cut -d= -f 2) psql -U $(grep POSTGRES_USERNAME .env | cut -d= -f 2) $(grep POSTGRES_PASSWORD .env | cut -d= -f 2) -c \"CREATE DATABASE $(grep POSTGRES_DATABASE .env | cut -d= -f 2)\"",
+    "mongodb:start": "docker run -d -p $(grep MONGODB_PORT .env | cut -d= -f 2):27017 --name $(grep MONGODB_DATABASE .env | cut -d= -f 2) mongo:4.4-bionic",
+    "mongodb:exec": "docker exec -it -d $(grep MONGODB_DATABASE .env | cut -d= -f 2) mongo",
+    "docker:build": "docker build -t users-api .",
+    "docker:run": "docker run -d -p $(grep ^PORT .env | cut -d= -f 2):$(grep ^PORT .env | cut -d= -f 2) users-api"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "eslint": "^8.44.0",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
+    "knex": "^2.4.2",
+    "mongoose": "^7.3.2",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.11.1",
+    "sqlite3": "^5.1.6"
+  }
+}
