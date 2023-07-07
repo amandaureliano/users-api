@@ -12,10 +12,11 @@ class Users {
   create = async (request, response) => {
     try {
       request.body.password = await bcrypt.hash(request.body.password, 10);
-      request.body.avatar = request.file.filename;
+      request.body.avatar = request.file?.filename ?? '';
       await knex('users').insert(request.body).returning("*");
       return response.redirect(302,'/login');
     } catch (error) {
+      console.log(error);
       throw new DbError(error, 500);
     }
   };
@@ -27,7 +28,7 @@ class Users {
       }
 
       const [updatedUser] = await knex('users').update(request.body).where("id", request.id).returning("*");
-      
+
       if (request.file) {
         return response.status(200).json(updatedUser).send(request.file);
       }
